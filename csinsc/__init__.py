@@ -356,7 +356,7 @@ class SimpleScreen:
             print("".join(row))
         print(flush=True)
 
-
+'''
 ####################################################################
 # Simple curses wrapper so console based text games can be easily  #
 # written, tweaked, and analysed.                                  #
@@ -391,7 +391,7 @@ class Screen(object):
         self.keys["vpad_up"] = False
         self.keys["vpad_down"] = False
         self.keys["vpad_left"] = False
-        self.keys["vpad_right"] = False            
+        self.keys["vpad_right"] = False
 
         self.win = None
 
@@ -421,7 +421,7 @@ class Screen(object):
             self.setup()
 
         self.clear()
-        locale.setlocale(locale.LC_ALL, '')      
+        locale.setlocale(locale.LC_ALL, '')
 
     def __del__(self):
       self.teardown()
@@ -434,7 +434,7 @@ class Screen(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.teardown()
 
-    def setup(self):      
+    def setup(self):
       self.fd = sys.stdin.fileno()
 
       self.oldterm = termios.tcgetattr(self.fd)
@@ -448,7 +448,7 @@ class Screen(object):
 
       print("\033[?1003h") # click detection
       print("\033[?1006h") # make it better
-      print("\033[?7l") # don't  line wrap      
+      print("\033[?7l") # don't  line wrap
 
     def teardown(self):
       print(flush=True, end="")
@@ -457,7 +457,7 @@ class Screen(object):
       print("\033[?25h", end="") # show cursor
       print("\033[?1003l", end="") # disable click detection
       print("\033[?1006l", end="") # make it better
-      print("\033[?7h", end="") # line wrap         
+      print("\033[?7h", end="") # line wrap
 
     def shutdown(self):
         self.teardown()
@@ -513,7 +513,7 @@ class Screen(object):
         self.x = x
         self.y = y
 
-    
+
     def messageBox(self, message, title = ""):
       # make a copy of the Screen
       screen = copy.deepcopy(self.screen)
@@ -582,12 +582,12 @@ class Screen(object):
         y = int(y)
         if y < 0 or y > self.height - 1:
           return
-        for dx, ch in enumerate(text):            
+        for dx, ch in enumerate(text):
             if (x + dx) < 0:
               continue
             elif (x + dx) > self.width - 1:
               return
-            
+
             # transparency
             if ch == '.':
               continue
@@ -601,14 +601,14 @@ class Screen(object):
                                                  bgcolour[0],
                                                  bgcolour[1],
                                                  bgcolour[2]]
-                                    
+
     def getCharAt(self, x, y):
         return self.screen[int(y)][int(x)]
 
     # alias for refresh
     def reveal(self):
       return self.refresh()
-        
+
     def refresh(self):
       print("\033[%d;%dH" % (0, 0))
       prevColourCode = ""
@@ -622,30 +622,30 @@ class Screen(object):
                                                                     colour[3],
                                                                     colour[4],
                                                                     colour[5] )
-          
+
           if colourCode == prevColourCode:
-            line += self.screen[row][col]# + " "  
+            line += self.screen[row][col]# + " "
           else:
             line += colourCode + self.screen[row][col]# + " "
           prevColourCode = colourCode
-        print(line, flush=True) 
+        print(line, flush=True)
 
       # clearing the glitch on the right side of the screen
       # when a double replacement character � is glitched instead of an emoji
       print("\033[0m")
       for row in range(len(self.screen) + 1):
-        print("\033[%d;%dH " % (row, len(self.screen[0]) + 1)) 
+        print("\033[%d;%dH " % (row, len(self.screen[0]) + 1))
 
       # updating keys and mouse position
       for key in range(512):
-          self.keys[key] = False   
+          self.keys[key] = False
       self.keys["vpad_up"] = False
       self.keys["vpad_down"] = False
       self.keys["vpad_left"] = False
       self.keys["vpad_right"] = False
 
       self.oldflags = fcntl.fcntl(self.fd, fcntl.F_GETFL)
-      fcntl.fcntl(self.fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)   
+      fcntl.fcntl(self.fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
 
       try:
         try:
@@ -653,9 +653,9 @@ class Screen(object):
           while len(c) > 0:
             if c == "\033":
               # escape character detected
-              c = sys.stdin.read(1)      
+              c = sys.stdin.read(1)
               if c == "[":
-                c = sys.stdin.read(1)      
+                c = sys.stdin.read(1)
                 if c == "<":
                   # mouse state updated!
                   data = ""
@@ -669,7 +669,7 @@ class Screen(object):
                   if m_char == -1:
                     m_char = coords[2].find('m')
                   self.mouse_y = int(coords[2][:m_char]) - 1
-                  
+
                   if self.mouse_x <= 4:
                     self.keys["vpad_left"] = True
                   elif self.mouse_x >= self.width - 4:
@@ -677,16 +677,16 @@ class Screen(object):
                   if self.mouse_y <= 4:
                     self.keys["vpad_up"] = True
                   elif self.mouse_y >= self.height - 4:
-                    self.keys["vpad_down"] = True    
+                    self.keys["vpad_down"] = True
               else:
                 # escape key pressed, bail
                 self.teardown()
-                return False                  
+                return False
             else:
               self.keys[ord(c)] = True
               # ESCAPE key pressed, finish
-            c = sys.stdin.read(1)                   
-        except IOError: 
+            c = sys.stdin.read(1)
+        except IOError:
           pass
       finally:
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.oldflags)
@@ -694,13 +694,13 @@ class Screen(object):
       if self.fps is not None:
           sleep(1 / self.fps)
       return True
-                                 
+
     def isKeyPressed(self, key):
       if len(key) == 1:
-        return self.keys[ord(key)]    
+        return self.keys[ord(key)]
       else:
         return self.keys[key]
-    
+
     def getKeysPressed(self):
       keys = []
       for key in self.keys.keys():
@@ -710,10 +710,11 @@ class Screen(object):
 
     def setFPS(self, fps):
         self.fps = fps
-        
+'''
+
 ####################################################################
 #                     Helper functions                             #
-####################################################################        
+####################################################################
 from math import copysign
 def getSign(value):
     return copysign(1, value)
@@ -738,7 +739,7 @@ class Sprite:
     if horiz_margin > left_margin:
       left_margin = horiz_margin
     if horiz_margin > right_margin:
-      right_margin = horiz_margin    
+      right_margin = horiz_margin
 
     return point.x >= self.x - left_margin and \
             point.x <= self.x + len(self.text) + right_margin and \
@@ -754,7 +755,7 @@ class TimeWeather:
 
   def getTemp(city):
     from requests import get
-    from bs4 import BeautifulSoup    
+    from bs4 import BeautifulSoup
 
     current_datetime = TimeWeather.getTime(city)
     city = city.lower()
@@ -764,7 +765,7 @@ class TimeWeather:
         #print("cached weather")
         return TimeWeather.weather[city][1]
 
-    page = get(f"http://www.bom.gov.au/vic/observations/{city}.shtml")   
+    page = get(f"http://www.bom.gov.au/vic/observations/{city}.shtml")
     soup = BeautifulSoup(page.content, 'html.parser')
     temp = soup.find('tr', class_="rowleftcolumn").find_all('td')[1].text
     TimeWeather.weather[city] = [current_datetime, temp]
@@ -777,8 +778,8 @@ class TimeWeather:
     import pytz
 
     if city.lower() in TimeWeather.cities:
-      tz = pytz.timezone('Australia/' + city.lower()) 
+      tz = pytz.timezone('Australia/' + city.lower())
       return datetime.now(tz)
     else:
-      raise "Unknown city"  
+      raise "Unknown city"
 '''
