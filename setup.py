@@ -4,11 +4,11 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="csinsc",
+    name="csinsc-ms",
     version="1.1.0.6",
     author="Toan Huynh",
     author_email="toan@csinschools.io",
-    description="Tools and libraries used in the CSinSchools course",
+    description="Tools and libraries used in the CS in Schools course",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/toanh/csinsc",
