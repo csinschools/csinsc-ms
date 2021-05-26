@@ -1,6 +1,6 @@
 # csinsc code helper package (for Windows)
 
-Tools and libraries used in the CSinSchools course.
+Tools and libraries used in the CS in Schools course.
 Includes a trace based goto functionality.
 Incorporates the termcolor library.
 And a simple curses wrapper.
