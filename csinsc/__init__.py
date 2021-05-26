@@ -4,7 +4,9 @@ name = "csinsc"
 version = "1.1.0.6"
 
 # for complete the blanks exercises
-__________ = None
+____  = None
+________ = None
+________________ = None
 
 '''
 goto functionality
