@@ -1,7 +1,7 @@
 from __future__ import print_function
 
-name = "csinsc-ms"
-version = "1.1.0.6"
+name = "csinsc_ms"
+version = "1.1.0.7"
 
 # for complete the blanks exercises
 ____  = None
@@ -14,7 +14,7 @@ used (and tweaked) from: http://entrian.com/goto/download.html
 '''
 
 # checking_argv0 will only enable goto for the outer file that
-# imports csinsc-ms
+# imports csinsc_ms
 # set this to False if you need goto for other files (will be
 # slow)
 checking_argv0 = True

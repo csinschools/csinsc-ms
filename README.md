@@ -1,4 +1,4 @@
-# csinsc code helper package (for Windows)
+# csinsc_ms code helper package (for Windows)
 
 This Python package was compiled and created by Toan Huynh.
 
